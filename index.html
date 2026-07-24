@@ -548,18 +548,18 @@ function reviewHTML(){
   return `<p class="intro"><strong>${filled} of ${total}</strong> questions answered.</p>
   <div class="meter"><div style="width:${pct}%"></div></div>
   ${blocks}
-  <div class=”exportrow”>
-    <button class=”btn” id=”dl”>Download my answers (PDF)</button>
-    <button class=”btn ghost” id=”cp”>Copy all answers</button>
-    <button class=”btn ghost” id=”st”>Show answers as text</button>
-    <button class=”btn ghost” id=”ml”>Open email to Ari</button>
+  <div class="exportrow">
+    <button class="btn" id="dl">Download my answers (PDF)</button>
+    <button class="btn ghost" id="cp">Copy all answers</button>
+    <button class="btn ghost" id="st">Show answers as text</button>
+    <button class="btn ghost" id="ml">Open email to Ari</button>
   </div>
-  <div id=”textpanel” style=”display:none; margin-top:18px”>
-    <p class=”exportnote” style=”margin:0 0 8px”><strong>Manual copy (works in every browser):</strong> click inside the box, press ⌘A (or Ctrl+A) then ⌘C (or Ctrl+C), and paste into an email to Ari.</p>
-    <button class=”btn ghost” id=”sel” style=”margin-bottom:10px”>Select all for me</button>
-    <textarea id=”mdtext” readonly style=”width:100%; min-height:320px; border:1px solid var(--line-strong); border-radius:9px; background:var(--paper); color:var(--ink); font:12.5px/1.5 ui-monospace,Menlo,monospace; padding:12px”></textarea>
+  <div id="textpanel" style="display:none; margin-top:18px">
+    <p class="exportnote" style="margin:0 0 8px"><strong>Manual copy (works in every browser):</strong> click inside the box, press ⌘A (or Ctrl+A) then ⌘C (or Ctrl+C), and paste into an email to Ari.</p>
+    <button class="btn ghost" id="sel" style="margin-bottom:10px">Select all for me</button>
+    <textarea id="mdtext" readonly style="width:100%; min-height:320px; border:1px solid var(--line-strong); border-radius:9px; background:var(--paper); color:var(--ink); font:12.5px/1.5 ui-monospace,Menlo,monospace; padding:12px"></textarea>
   </div>
-  <p class=”exportnote”>The PDF saves to your <strong>Downloads folder</strong> — attach it to an email to <a href=”mailto:outreach@mintmantis.com”>outreach@mintmantis.com</a>. If the buttons don't respond in this browser, use <strong>”Show answers as text”</strong> — manual select-and-copy works everywhere. Your answers also stay saved in this browser.</p>`;
+  <p class="exportnote">The PDF saves to your <strong>Downloads folder</strong> — attach it to an email to <a href="mailto:outreach@mintmantis.com">outreach@mintmantis.com</a>. If the buttons don't respond in this browser, use <strong>"Show answers as text"</strong> — manual select-and-copy works everywhere. Your answers also stay saved in this browser.</p>`;
 }
 
 function render(){
