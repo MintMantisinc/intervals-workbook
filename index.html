@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Intervals of Service — Positioning Workbook</title>
+<style>
+:root{
+  --paper:#FAFAF8; --panel:#FFFFFF; --ink:#20281F; --muted:#5D6A5E; --faint:#8A968B;
+  --accent:#206B4E; --accent-ink:#FFFFFF; --accent-soft:#EAF2ED;
+  --hint:#B07C24; --hint-soft:#FBF4E6;
+  --trap:#A3512E; --trap-soft:#F9EEE8;
+  --line:#E2E6DD; --line-strong:#C9D0C6;
+  --done:#206B4E; --shadow:0 1px 2px rgba(32,40,31,.05),0 8px 24px rgba(32,40,31,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#131813; --panel:#1B211B; --ink:#E8EBE4; --muted:#A7B2A6; --faint:#77836F;
+    --accent:#5FB88E; --accent-ink:#0E1510; --accent-soft:#1E2E25;
+    --hint:#D9A84E; --hint-soft:#2A2419;
+    --trap:#E08A5E; --trap-soft:#2C201A;
+    --line:#2A322A; --line-strong:#3A443A;
+    --done:#5FB88E; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131813; --panel:#1B211B; --ink:#E8EBE4; --muted:#A7B2A6; --faint:#77836F;
+  --accent:#5FB88E; --accent-ink:#0E1510; --accent-soft:#1E2E25;
+  --hint:#D9A84E; --hint-soft:#2A2419;
+  --trap:#E08A5E; --trap-soft:#2C201A;
+  --line:#2A322A; --line-strong:#3A443A;
+  --done:#5FB88E; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+}
+:root[data-theme="light"]{
+  --paper:#FAFAF8; --panel:#FFFFFF; --ink:#20281F; --muted:#5D6A5E; --faint:#8A968B;
+  --accent:#206B4E; --accent-ink:#FFFFFF; --accent-soft:#EAF2ED;
+  --hint:#B07C24; --hint-soft:#FBF4E6;
+  --trap:#A3512E; --trap-soft:#F9EEE8;
+  --line:#E2E6DD; --line-strong:#C9D0C6;
+  --done:#206B4E; --shadow:0 1px 2px rgba(32,40,31,.05),0 8px 24px rgba(32,40,31,.06);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--paper); color:var(--ink);
+  font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.app{display:flex; min-height:100vh; max-width:1180px; margin:0 auto}
+
+/* ---------- rail ---------- */
+.rail{
+  width:276px; flex:0 0 276px; padding:36px 20px 36px 28px;
+  border-right:1px solid var(--line); position:sticky; top:0; align-self:flex-start;
+  max-height:100vh; overflow-y:auto;
+}
+.brand{margin-bottom:24px}
+.brand .kicker{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); font-weight:600}
+.brand h1{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; font-size:21px; line-height:1.25; margin:6px 0 2px; font-weight:600; text-wrap:balance}
+.brand .sub{font-size:12.5px; color:var(--muted)}
+.navlist{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:2px}
+.navlist button{
+  display:flex; align-items:baseline; gap:10px; width:100%; text-align:left;
+  background:none; border:0; border-radius:8px; padding:7px 10px; cursor:pointer;
+  color:var(--muted); font:13.5px/1.35 inherit; font-family:inherit;
+}
+.navlist button:hover{background:var(--accent-soft); color:var(--ink)}
+.navlist button.active{background:var(--accent); color:var(--accent-ink)}
+.navlist button.active .navnum{color:var(--accent-ink); opacity:.75}
+.navnum{font-size:11px; font-variant-numeric:tabular-nums; color:var(--faint); width:20px; flex:0 0 20px}
+.navdot{margin-left:auto; font-size:11px; color:var(--done); visibility:hidden}
+.navlist button.done .navdot{visibility:visible}
+.navgroup{font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--faint); margin:16px 0 6px 10px; font-weight:600}
+.railfoot{margin-top:26px; font-size:11.5px; color:var(--faint); line-height:1.5}
+.savebadge{display:inline-flex; align-items:center; gap:6px; font-size:11.5px; color:var(--muted); margin-top:8px}
+.savebadge::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--done); flex:0 0 7px}
+.savebadge.warn::before{background:var(--trap)}
+.railbtn{
+  margin-top:12px; width:100%; border:1px solid var(--line-strong); background:transparent;
+  color:var(--muted); border-radius:8px; padding:8px 10px; font:600 12px/1 inherit; font-family:inherit; cursor:pointer;
+}
+.railbtn:hover{color:var(--ink); border-color:var(--faint)}
+.storagewarn{
+  margin-top:12px; padding:10px 12px; border-radius:9px; background:var(--trap-soft);
+  border:1px solid var(--trap); color:var(--ink); font-size:11.5px; line-height:1.5; display:none;
+}
+.storagewarn.show{display:block}
+
+/* ---------- main ---------- */
+.main{flex:1; min-width:0; padding:44px 48px 80px}
+.step{display:none; max-width:640px}
+.step.visible{display:block}
+.eyebrow{font-size:11.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); font-weight:600; margin:0 0 10px}
+.step h2{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; font-size:30px; line-height:1.2; margin:0 0 14px; font-weight:600; text-wrap:balance}
+.intro{color:var(--muted); font-size:15.5px; margin:0 0 8px; max-width:60ch}
+.intro strong{color:var(--ink)}
+.callout{
+  border-left:3px solid var(--accent); background:var(--accent-soft);
+  padding:12px 16px; border-radius:0 10px 10px 0; margin:20px 0 4px;
+  font-size:14px; color:var(--ink); max-width:60ch;
+}
+.callout .cn{font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--accent); font-weight:700; display:block; margin-bottom:3px}
+.callout.trap{border-left-color:var(--trap); background:var(--trap-soft)}
+.callout.trap .cn{color:var(--trap)}
+
+.q{margin:30px 0 0; padding:22px 24px; background:var(--panel); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow)}
+.q label{display:block; font-weight:600; font-size:15.5px; line-height:1.45; margin-bottom:4px}
+.q .optional{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--faint); font-weight:700; margin-left:6px}
+.q .why{font-size:13.5px; color:var(--muted); margin:0 0 12px; max-width:60ch}
+.q textarea{
+  width:100%; border:1px solid var(--line-strong); border-radius:9px; background:var(--paper);
+  color:var(--ink); font:15px/1.55 inherit; font-family:inherit; padding:11px 13px; resize:vertical;
+}
+.q textarea:focus{outline:2px solid var(--accent); outline-offset:1px; border-color:var(--accent)}
+.q textarea::placeholder{color:var(--faint)}
+details.hintbox{margin-top:12px; border:1px dashed var(--hint); border-radius:9px; background:var(--hint-soft)}
+details.hintbox summary{
+  cursor:pointer; padding:9px 13px; font-size:13px; font-weight:600; color:var(--hint);
+  list-style:none; display:flex; align-items:center; gap:7px;
+}
+details.hintbox summary::-webkit-details-marker{display:none}
+details.hintbox summary::before{content:"◆"; font-size:9px}
+details.hintbox[open] summary{border-bottom:1px dashed var(--hint)}
+details.hintbox .hintbody{padding:11px 14px 13px; font-size:13.5px; line-height:1.55; color:var(--ink)}
+details.hintbox .hintbody em{color:var(--muted)}
+.recall{
+  margin:26px 0 0; padding:16px 20px; border:1px solid var(--line); border-radius:12px;
+  background:var(--paper); font-size:13.5px;
+}
+.recall .rc-title{font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--faint); font-weight:700; margin-bottom:6px}
+.recall .rc-body{white-space:pre-wrap; color:var(--muted); font-size:13.5px; line-height:1.55; max-height:180px; overflow-y:auto}
+.recall .rc-body.empty{font-style:italic}
+
+/* assembled statement */
+.canvas-stmt{
+  font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  font-size:19px; line-height:1.65; padding:26px 30px; border-radius:14px;
+  background:var(--panel); border:1px solid var(--line); box-shadow:var(--shadow); margin:26px 0 0;
+}
+.canvas-stmt .slot{color:var(--accent); font-weight:600}
+.canvas-stmt .slot.empty{color:var(--faint); font-weight:400; font-style:italic}
+.canvas-frame{font-size:12px; letter-spacing:.13em; text-transform:uppercase; color:var(--faint); font-weight:600; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; margin-bottom:14px}
+
+/* nav buttons */
+.stepnav{display:flex; gap:12px; margin-top:38px; align-items:center}
+.btn{
+  border:0; border-radius:10px; padding:11px 22px; font:600 14.5px/1 inherit; font-family:inherit;
+  cursor:pointer; background:var(--accent); color:var(--accent-ink);
+}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent; color:var(--muted); border:1px solid var(--line-strong)}
+.btn.ghost:hover{color:var(--ink); border-color:var(--faint); filter:none}
+.stepcount{margin-left:auto; font-size:12.5px; color:var(--faint); font-variant-numeric:tabular-nums}
+
+/* review */
+.review-block{margin:26px 0; padding:20px 24px; background:var(--panel); border:1px solid var(--line); border-radius:14px}
+.review-block h3{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; font-size:17px; margin:0 0 10px}
+.review-item{margin:0 0 14px}
+.review-item .rq{font-size:13px; font-weight:600; color:var(--muted); margin:0 0 2px}
+.review-item .ra{font-size:14px; white-space:pre-wrap; margin:0}
+.review-item .ra.blank{color:var(--hint); font-style:italic}
+.meter{height:8px; border-radius:99px; background:var(--line); overflow:hidden; margin:14px 0 6px}
+.meter>div{height:100%; background:var(--done); border-radius:99px; transition:width .3s ease}
+.exportrow{display:flex; flex-wrap:wrap; gap:12px; margin-top:22px}
+.exportnote{font-size:13.5px; color:var(--muted); margin-top:14px; max-width:56ch}
+.exportnote a{color:var(--accent)}
+
+/* welcome specifics */
+.howlist{margin:22px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:14px; max-width:58ch}
+.howlist li{display:flex; gap:14px; font-size:15px}
+.hownum{
+  flex:0 0 26px; height:26px; border-radius:50%; background:var(--accent-soft); color:var(--accent);
+  font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; margin-top:2px;
+}
+.stagemap{margin:26px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:0; max-width:58ch}
+.stagemap li{display:flex; gap:14px; position:relative; padding:0 0 18px}
+.stagemap li::before{
+  content:""; position:absolute; left:12px; top:26px; bottom:0; width:2px; background:var(--line);
+}
+.stagemap li:last-child::before{display:none}
+.stagenum{
+  flex:0 0 26px; height:26px; border-radius:50%; background:var(--accent); color:var(--accent-ink);
+  font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; position:relative; z-index:1;
+}
+.stagemap .stagename{font-weight:600; font-size:15px}
+.stagemap .stagedesc{font-size:13.5px; color:var(--muted); line-height:1.5}
+.stagemap .stagetime{font-size:11.5px; color:var(--faint); font-variant-numeric:tabular-nums}
+
+/* mobile */
+.mobilebar{display:none}
+@media (max-width:860px){
+  .app{flex-direction:column}
+  .rail{position:static; width:auto; flex:none; max-height:none; border-right:0; border-bottom:1px solid var(--line); padding:22px 20px 8px}
+  .navwrap{display:none}
+  .navwrap.open{display:block; padding-bottom:14px}
+  .mobilebar{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:8px 0 14px; cursor:pointer; border:0; background:none; width:100%;
+    color:var(--ink); font:600 14px/1 inherit; font-family:inherit;
+  }
+  .main{padding:30px 20px 70px}
+  .step h2{font-size:25px}
+}
+@media print{
+  .rail,.stepnav,.exportrow,.mobilebar{display:none !important}
+  .step{display:block !important; max-width:none}
+  body{background:#fff; color:#000}
+}
+@media (prefers-reduced-motion: reduce){ *{transition:none !important; animation:none !important} }
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="rail">
+    <div class="brand">
+      <div class="kicker">Mint Mantis · Author Strategy</div>
+      <h1>Intervals of Service</h1>
+      <div class="sub">Proposal Workbook — for Ronnie</div>
+    </div>
+    <button class="mobilebar" id="mobiletoggle" aria-expanded="false">
+      <span id="mobilelabel">Contents</span><span>▾</span>
+    </button>
+    <div class="navwrap" id="navwrap">
+      <nav aria-label="Workbook steps"><ul class="navlist" id="navlist"></ul></nav>
+      <div class="railfoot">
+        <span class="savebadge" id="savebadge">Autosave on</span>
+        <div class="storagewarn" id="storagewarn"><strong>Autosave is blocked in this browser.</strong> Your answers live only on this open page — use “Download backup” often, and before closing.</div>
+        <button class="railbtn" id="backupbtn">Back up my answers</button>
+      </div>
+    </div>
+  </aside>
+  <main class="main" id="main"></main>
+</div>
+
+<script>
+"use strict";
+/* ---------------- content model ---------------- */
+const HINT = "Stuck? Open a draft to react to";
+const STEPS = [
+{ id:"welcome", nav:"Welcome", group:null, eyebrow:"Before you begin", title:"Find the positioning only you can claim.",
+  intro:[
+    "Ronnie — this workbook takes you through the five stages of preparing your book for fundraising on Publishizer. It starts with April Dunford's <strong>Obviously Awesome</strong> positioning process, because every later decision — your message, your outreach, your pricing, your pitch page — inherits its quality from the positioning underneath it.",
+    "The point is not to fill boxes. It's to arrive at answers <strong>you</strong> believe, because you found them. Budget roughly three hours across two or three sittings — natural break points are marked on the map below."
+  ],
+  html:`<ul class="stagemap">
+    <li><span class="stagenum">1</span><div><div class="stagename">Positioning <span class="stagetime">· ~75 min · sitting one</span></div><div class="stagedesc">Who this book must not fail, what you're truly up against, and what only you can claim. Nine steps, in Dunford's order.</div></div></li>
+    <li><span class="stagenum">2</span><div><div class="stagename">Messaging <span class="stagetime">· ~25 min · sitting two</span></div><div class="stagedesc">Turning the positioning into words: your elevator answer, page headline, promise, and which stories lead.</div></div></li>
+    <li><span class="stagenum">3</span><div><div class="stagename">Sales readiness <span class="stagetime">· ~30 min</span></div><div class="stagedesc">Your network, sorted; your openers, drafted; your campaign outreach, honestly sized.</div></div></li>
+    <li><span class="stagenum">4</span><div><div class="stagename">System &amp; pricing <span class="stagetime">· ~30 min · sitting three</span></div><div class="stagedesc">The ladder from free tool to premium coaching, priced — this becomes your campaign's reward tiers.</div></div></li>
+    <li><span class="stagenum">5</span><div><div class="stagename">The proposal <span class="stagetime">· ~30 min</span></div><div class="stagedesc">Raw materials for the Publishizer page: bio, outline, numbers, video, boundaries. Then review and send to Ari.</div></div></li>
+  </ul>
+  <ul class="howlist">
+    <li><span class="hownum">a</span><div><strong>Work in order.</strong> Each step builds on the one before — your earlier answers reappear when a later step needs them.</div></li>
+    <li><span class="hownum">b</span><div><strong>Try before peeking.</strong> Most questions carry a <em>draft to react to</em>, written from your first three chapters. Attempt your own answer first — then open the draft and correct it. Crossing out a wrong draft is progress.</div></li>
+    <li><span class="hownum">c</span><div><strong>Watch for the trap.</strong> Each step names the mistake most authors make right there. Read it before answering — if your answer walks into the trap, that's the signal to dig once more.</div></li>
+    <li><span class="hownum">d</span><div><strong>Everything autosaves</strong> on this device as you type (use the same browser throughout). The “Download backup” button on the left saves a copy anytime. At the end, you'll download your full answers and email them to Ari.</div></li>
+  </ul>`,
+  fields:[]
+},
+{ id:"dest", nav:"The Destination", group:"Ground work", eyebrow:"Ground work", title:"Before positioning: where is this going?",
+  intro:["The book is the front door to your coaching practice. Before we position the door, we define the house. Every later answer gets judged against what you write here."],
+  trap:"Most authors answer this stage with a feeling — “get the book out there,” “build momentum.” Feelings can't be planned toward, and a campaign can't be designed around them. If your answers here have no numbers in them, they aren't answers yet.",
+  fields:[
+    {k:"dest_success", label:"One year after the campaign, what does success look like — in numbers?", why:"A book that wins readers but attracts the wrong coaching clients is a failure for you. Name clients, engagements, and revenue.", rows:4,
+     hint:"“I have 8–10 paying executive coaching clients at premium rates, 2–3 corporate workshop or speaking engagements booked, and the book got me into those rooms.”"},
+    {k:"dest_offer", label:"What is your coaching offer today — and what would you like it to be?", why:"Format, duration, price. If you've never charged, write what you'd charge if forced to name a number tomorrow. The campaign's high-value reward tiers ARE this offer.", rows:5,
+     hint:"“1:1 executive coaching, 6-month engagements, twice monthly, $____/month. Plus a half-day ‘Next Interval’ workshop for leadership teams at $____.”"},
+    {k:"dest_clients", label:"Who have you already coached — paid or unpaid — and what changed for them?", why:"Name 3–5 real people (initials fine): title, situation when they came to you, outcome. These become testimonials and pitch-page proof. Publishers silently ask: does anyone already pay this person for this?", rows:6},
+    {k:"dest_network", label:"Who could you ask TODAY for an endorsement, a bulk order, or a workshop booking?", why:"List every corporate relationship, former colleague now senior, pharma/healthcare contact, and international connection who takes your calls. This list is the campaign.", rows:6}
+  ]
+},
+{ id:"d1", nav:"Best customers", group:"Stage 1 · Positioning", eyebrow:"Stage 1 · Positioning — Step 1 of 9", title:"Start with the people you've served best.",
+  intro:["Dunford's process begins here, not with slogans: <strong>your best positioning is hiding in the customers who already love what you do.</strong> Not everyone you've helped — the ones where it clearly, almost easily, worked."],
+  trap:"The trap here is listing the people you'd LIKE to serve instead of the people you actually served well. Aspiration contaminates the data. Only real names, real situations, real outcomes — the pattern you need is hiding in what already worked, not in what you hope works next.",
+  fields:[
+    {k:"d1_best", label:"List 3–5 people you have helped think through 'where they are and what's next' — where it visibly worked.", why:"Coached formally or informally, paid or not. For each: initials, role, the situation they were in, what changed.", rows:7,
+     hint:"Think of the executives you mention in the chapters — the ones who ‘hit a milestone they spent twenty years chasing, look up, and feel curiously empty,’ or who realized ‘the first big Yes they said early in their career has been defining the shape of every yes since.’ Who were they, specifically?"},
+    {k:"d1_common", label:"Now look at that list. What do the people who got the MOST value have in common?", why:"This is the first aha of the method: patterns in your real track record, not in your ambitions. Age? Seniority? Industry? What had just happened to them?", rows:4,
+     hint:"Common patterns for coaches with your story: they were senior, mid-50s, and something had <em>ended</em> — a role eliminated, a company sold, a milestone achieved that felt empty. Check it against your actual list."}
+  ]
+},
+{ id:"d2", nav:"Put down baggage", group:null, eyebrow:"Stage 1 · Positioning — Step 2 of 9", title:"Put down the positioning baggage.",
+  intro:["Every author carries a default description of their book — usually the one that formed first, not the one that serves best. Dunford's instruction: write it down, look at it, and consciously decide what you're free to let go of."],
+  trap:"The trap is defending “it's for everyone” because narrowing feels like turning readers away. It's the reverse: a book for everyone competes with everything and gets chosen by no one. Narrowing is not shrinking your audience — it's the only way to win one. The general reader can still buy the book; they just aren't who the pitch speaks to.",
+  fields:[
+    {k:"d2_current", label:"When someone at a dinner party asks 'what's your book about?' — what do you currently say? Write it exactly, in one breath.", why:"Don't improve it. Capture the real current answer — that's the baseline we're repositioning.", rows:3},
+    {k:"d2_wish", label:"And what do you WISH you could say — the answer that would make the right person lean in?", why:"The gap between these two answers usually reveals the positioning problem better than any framework.", rows:3},
+    {k:"d2_baggage", label:"What assumptions about this book might you need to release?", why:"E.g., 'it's for everyone,' 'it's my life story,' 'the travel stories are the heart of it,' 'I shouldn't lead with being a coach.' Naming them is what lets you choose deliberately instead of by habit.", rows:5,
+     hint:"Your current intro promises the book is for ‘everyone out there ready to lead from where they are.’ Dunford would call ‘everyone’ the heaviest baggage a positioning can carry. What are you relieved to stop claiming?"}
+  ]
+},
+{ id:"d3", nav:"True alternatives", group:null, eyebrow:"Stage 1 · Positioning — Step 3 of 9", title:"What would they do if you didn't exist?",
+  intro:["Dunford's sharpest reframe: <strong>you are not positioned against competitors — you are positioned against whatever your customer would actually do instead.</strong> Often that's 'nothing,' 'push harder,' or a spreadsheet. For your reader, it might be a résumé service."],
+  recall:{title:"From Step 1 — your best-served people", key:"d1_common"},
+  trap:"The trap is naming famous authors as your competition. A laid-off SVP's real alternative isn't ‘Arthur Brooks’ — it's sprinting into the next job, or doing nothing and calling it patience. If your list is all books, you haven't found the real default yet — and the real default is the one your positioning must beat.",
+  fields:[
+    {k:"d3_alts", label:"If this book — and you — didn't exist, what would that person do about their situation? List everything.", why:"Other books, outplacement firms, therapy, LinkedIn hustle, a sabbatical, golf, denial, sprinting into the next job. Include the do-nothing option — it's usually the strongest competitor.", rows:7,
+     hint:"Candidates: outplacement (résumé-focused, backward-looking) · therapy (processes the pain, doesn't design what's next) · books like <em>Necessary Endings</em>, <em>From Strength to Strength</em>, <em>Halftime</em>, <em>Designing Your Life</em> · or the default your own Chapter 3 warns about — ‘the urge to sprint back into the market and accept anything that'll have you.’"},
+    {k:"d3_real", label:"Which ONE of those is the real default — the thing most of them actually do?", why:"Your positioning must beat this specific alternative, not a straw man.", rows:3}
+  ]
+},
+{ id:"d4", nav:"Unique attributes", group:null, eyebrow:"Stage 1 · Positioning — Step 4 of 9", title:"Isolate what only you have.",
+  intro:["Now the inventory: capabilities, experiences, and features <strong>you have that the alternatives don't.</strong> Ruthlessly concrete. 'I care deeply' is not an attribute; 'I was one of 2,500 eliminated in a pharma consolidation and rebuilt through a Wharton/Kellogg MBA in Bangkok' is."],
+  recall:{title:"From Step 3 — the alternatives you're up against", key:"d3_alts"},
+  trap:"Two traps share this step. One: listing virtues (“empathy,” “experience”) instead of verifiable facts — virtues are claims anyone can make. Two: modesty. Southern manners will tempt you to soften the credential. The reader deciding whether to trust you with their career transition NEEDS the unsoftened facts. Save the humility for the prose; the inventory is no place for it.",
+  fields:[
+    {k:"d4_attrs", label:"List 6–10 attributes none of those alternatives can claim. Then mark your top three with a star.", why:"These are the raw material for everything that follows. Facts, not virtues.", rows:9,
+     hint:"From your chapters: (1) lived, repeated reinvention at executive altitude — OR nurse → Abbott → global pharma leadership → layoff → global MBA → coach; (2) authority on endings you've <em>survived</em>, not studied — sudden family losses, health shocks, and the hard personal turnaround you write about in your later chapters; (3) a namable method — ‘intervals of service’ / service-as-orientation, with diagnostics already written; (4) global fluency across three continents; (5) healthcare and pharma insider credibility; (6) you ARE the demographic — living proof it's not too late."},
+    {k:"d4_unlike", label:"Complete three times, against your top three alternatives: “Unlike ___, I / this book ___.”", why:"Forces each attribute to do work against a real alternative.", rows:5,
+     hint:"“Unlike outplacement, which rebuilds your résumé for the life you just lost, I help you decide whether you even want that life back — then design the next interval.”"},
+    {k:"d4_not", label:"What are you NOT? Name the misreadings to prevent.", why:"Positioning is also fencing off. Your chapters risk being read as travel memoir or celebrity stories.", rows:3,
+     hint:"“Not a memoir, not a travel book, not motivational fluff, not a retirement book. And not a life coach — I work with leaders.”"}
+  ]
+},
+{ id:"d5", nav:"Attributes → value", group:null, eyebrow:"Stage 1 · Positioning — Step 5 of 9", title:"Turn attributes into value: 'so what?'",
+  intro:["Attributes are facts about you. Value is what those facts <strong>do for the reader.</strong> For each starred attribute, run the chain: attribute → so what? (benefit) → so what? (value in their life) → and what's your proof?"],
+  recall:{title:"From Step 4 — your unique attributes", key:"d4_attrs"},
+  trap:"The trap is stopping one ‘so what?’ too early. “I've lived through reinvention → so I understand it” is a benefit, not a value — nobody pays for being understood. Keep pushing until the chain ends in something your reader would trade money or time for: a faster decision, a mistake avoided, a next act designed instead of drifted into.",
+  fields:[
+    {k:"d5_chain1", label:"Chain 1 — starred attribute → benefit → value → proof.", why:"Keep asking 'so what?' until you hit something the reader would pay to have.", rows:5,
+     hint:"“I've survived the layoff, the losses, the reinventions (attribute) → so my guidance comes from lived pattern-recognition, not theory (benefit) → so a leader in freefall feels understood and gets a tested path, faster (value) → proof: Chapter 3's layoff story; the executives I've coached through the same turn.”"},
+    {k:"d5_chain2", label:"Chain 2.", why:"", rows:5, opt:true},
+    {k:"d5_chain3", label:"Chain 3.", why:"", rows:5, opt:true},
+    {k:"d5_themes", label:"Look at your chains. What one or two VALUE THEMES do they cluster into?", why:"Dunford: attributes cluster into a small number of value themes — these become the spine of your pitch page.", rows:3,
+     hint:"Likely candidates: <em>‘Turn an unchosen ending into a designed next act’</em> and <em>‘a career compass (service-as-orientation) that outlasts any single role.’</em> Yours may differ — trust your chains."}
+  ]
+},
+{ id:"d6", nav:"Who cares a lot", group:null, eyebrow:"Stage 1 · Positioning — Step 6 of 9", title:"Who cares a great deal about that value?",
+  intro:["Not who <em>could</em> benefit — who <strong>cares intensely, right now, and will act.</strong> Dunford: your best-fit segment is the group for whom your value is a burning need, not a nice-to-have."],
+  recall:{title:"From Step 5 — your value themes", key:"d5_themes"},
+  trap:"The trap is choosing the audience you LIKE over the audience with urgency and budget. You may feel most drawn to the searcher, the wanderer, the young dreamer — but the segment that funds a campaign and a coaching practice is the one where the problem has a date on it and money behind it. Affection is not a segmentation criterion; urgency is.",
+  fields:[
+    {k:"d6_rank", label:"Rank these four candidate readers 1–4 for YOUR book — and say why your #1 wins.", why:"(a) the executive facing an unchosen ending — layoff, restructure, forced exit · (b) the successful-but-empty executive · (c) the 50+ professional designing a second act · (d) the rising leader avoiding the wrong 'Yes.' Your chapters speak to all four — which is why the book currently speaks to no one in particular.", rows:5,
+     hint:"A draft ranking to react to: <strong>a, b, c, d</strong> — because (a) has urgency and a date on it, it's the story you actually lived, and it's the one companies pay to solve. Argue back if your Step 1 list disagrees."},
+    {k:"d6_person", label:"Now describe the ONE person this book must not fail. So specific it feels too narrow.", why:"Age, role, what just happened to them, what they fear, what they've already tried. Everyone else still gets to buy the book — but this person is who the pitch page speaks to.", rows:6,
+     hint:"“A 52-year-old VP, twenty-plus years of climbing, just eliminated in a restructuring. Identity fused to the title. Financially okay for now, existentially in freefall. Has updated the résumé, taken the outplacement calls — and privately suspects he doesn't want the old life back, but has no language for what's next.”"},
+    {k:"d6_buyer", label:"Is the coaching BUYER that same person — or someone else?", why:"The executive paying personally vs. HR/outplacement buying on their behalf vs. a company hiring you for its leaders. If companies buy, your campaign needs corporate-facing tiers.", rows:4},
+    {k:"d6_words", label:"When your person realizes they need help — what do they type into Google, or say to a friend at dinner? Their words, not yours.", why:"Pitch-page headline language comes from here. 'Service-as-orientation' is your philosophy; it is not what a laid-off SVP searches at 3:13am.", rows:4,
+     hint:"“what to do after being laid off at 55” · “executive transition coach” · “I don't want another job, I want to matter” · “is it too late to reinvent myself”"}
+  ]
+},
+{ id:"d7", nav:"Market frame", group:null, eyebrow:"Stage 1 · Positioning — Step 7 of 9", title:"Choose the market you'll win.",
+  intro:["The market category is context that makes your value obvious <strong>without explanation.</strong> Dunford offers three styles: compete <em>head-to-head</em> in an existing category; be the <em>big fish in a smaller pond</em> (a niche of an existing category); or <em>create a new game</em> (rare, expensive — needs missionary marketing)."],
+  recall:{title:"From Step 6 — your one person", key:"d6_person"},
+  trap:"Two traps. The comfortable one: staying on the ‘memoir’ shelf because that's the book you set out to write — memoir is where first-time authors go unfunded. The ambitious one: inventing a brand-new category (‘interval theory!’) — new categories demand missionary marketing budgets you don't have. The winning move is usually the modest-looking one: a sharp niche of a shelf that already has buyers.",
+  fields:[
+    {k:"d7_shelf", label:"Pick the shelf this book enters — and can win. Say why.", why:"(a) executive career transition / reinvention · (b) purpose-driven leadership · (c) memoir with lessons. Category sets reader and publisher expectations you never have to explain.", rows:4,
+     hint:"(c) is nearly unfundable for a first-time author. (b) is real but crowded — you'd fight Simon Sinek with a first book. (a) is a shelf where your story is a weapon, and it maps to Dunford's ‘big fish, smaller pond’: not all career books — <em>executive reinvention after an unchosen ending.</em>"},
+    {k:"d7_style", label:"Which of Dunford's three styles are you playing — and what's the pond, precisely?", why:"Write it as: 'Within [existing category], for [your person], the [your niche].'", rows:3,
+     hint:"“Within career/leadership books, for senior leaders whose path just ended, the executive-reinvention book written by a coach who has lived it — organized around ‘intervals of service.’”"}
+  ]
+},
+{ id:"d8", nav:"Why now (trend)", group:null, eyebrow:"Stage 1 · Positioning — Step 8 of 9", title:"Layer on a trend — carefully.",
+  intro:["Dunford's final layer, with a warning: a trend only helps if the connection to <strong>your value</strong> is obvious. Trend without positioning confuses; positioning without trend just moves slower. Why does this book matter NOW?"],
+  trap:"The trap is trend-jacking — bolting the book onto whatever is loud (AI! Great Resignation!) without a load-bearing connection. If you deleted the trend sentence and the pitch still made sense, the trend wasn't doing anything. The test: does the trend make YOUR person's problem more urgent, or just make the page sound current?",
+  fields:[
+    {k:"d8_trend", label:"What is happening in the world right now that makes your person's problem urgent — and how does your book connect to it?", why:"This gives media, publishers, and corporate buyers a reason to act this year, not eventually.", rows:5,
+     hint:"“The largest wave of executive displacement in decades — AI restructuring, pharma and tech consolidations, record 50+ layoffs — colliding with the longest working lives in history. Millions of leaders will face an unchosen ending in the next five years. I wrote the field guide from inside that experience.”"}
+  ]
+},
+{ id:"canvas", nav:"Your positioning", group:null, eyebrow:"Stage 1 · Positioning — Step 9 of 9", title:"Capture it: your positioning canvas.",
+  intro:["This is the payoff. Below, your own answers are assembled into Dunford's positioning canvas. Read it aloud. Where it rings false, go back and fix the step — not the sentence."],
+  canvas:true,
+  trap:"The trap at the finish line is wordsmithing — polishing the sentence until it sounds impressive while quietly papering over a weak step. If a slot feels wrong, the problem is upstream: the wrong person, a straw-man alternative, an unproven value. Fix the step; the sentence fixes itself.",
+  fields:[
+    {k:"c_statement", label:"Now write the positioning statement in your own voice — edit until every clause is true.", why:"Template: For [your person] who [their situation], Intervals of Service is [category] that [value]. Unlike [real alternative], it [unique attribute + proof].", rows:6}
+  ]
+},
+{ id:"msg", nav:"Messaging", group:"Stage 2 · Messaging", eyebrow:"Stage 2 · Messaging", title:"Turn the positioning into words that land.",
+  intro:["Positioning is a decision; messaging is that decision <strong>wearing your reader's language.</strong> Everything here must trace back to Stage 1 — and be written in the words your person uses (Step 6), not the words you love."],
+  recall:{title:"Your positioning statement (Stage 1, Step 9)", key:"c_statement"},
+  trap:"The trap of this whole stage: writing in YOUR language instead of theirs. ‘Service-as-orientation’ and ‘intervals’ are your philosophy — they belong inside the book, where you have pages to earn them. Headlines and promises must open with the reader's own words for their pain. Philosophy is the reward, never the door. Second trap: leading with the fascinating life (Bond, Bowie, St. Barts) instead of the reader's problem — charm attracts admirers; relevance converts buyers.",
+  fields:[
+    {k:"m_elevator", label:"Your new dinner-party answer: 'What's your book about?' — one breath, aimed at your one person.", why:"Compare it with your old answer from Stage 1, Step 2. If the new one doesn't name who it's for, it isn't done.", rows:3,
+     hint:"“It's for leaders whose career just ended without their permission — a layoff, a restructure, a role that quietly expired. I've been through that more than once, and I coach executives through it. The book turns an unchosen ending into a deliberately designed next act.”"},
+    {k:"m_promise", label:"The promise, on a Post-it, for that one person only.", why:"This becomes the emotional core of the pitch page — rewrite your intro's promise for the bullseye reader, not for everyone.", rows:4,
+     hint:"“When the career that defined you ends — by ambush or by emptiness — this book gives you the question, the diagnostics, and the company of someone who has rebuilt more than once, so your next interval is chosen, not settled for.”"},
+    {k:"m_headline", label:"Draft the Publishizer page headline — plus two alternates. Use your reader's 3:13am words.", why:"The headline is the single highest-leverage sentence of the campaign. Pull from your Step 6 language bank, not from the book's philosophy.", rows:4,
+     hint:"“The career you built just ended. Your best work hasn't.” · “For leaders facing an ending they didn't choose.” · “Laid off, bought out, aged out — now what? A field guide from someone who's rebuilt more than once.”"},
+    {k:"m_messages", label:"One key message for each audience: (1) the reader · (2) the corporate buyer · (3) the publisher.", why:"Same positioning, three translations. The reader buys transformation; the company buys a workshop that helps displaced or restless leaders; the publisher buys a platform and a market.", rows:6,
+     hint:"Reader: “Your ending isn't the end of your usefulness — here's how to design what's next.” · Corporate: “Restructures leave your remaining leaders shaken and your exiting ones unsupported — this book plus a working session addresses both.” · Publisher: “An executive coach with corporate access selling into the biggest wave of senior displacement in decades.”"},
+    {k:"m_stories", label:"Which of your stories LEAD the messaging — and which get rationed?", why:"Your chapters hold two kinds of stories: authority stories (the layoff, the reinventions, the hardest chapters) and charm stories (Billy Joel, Bowie, St. Barts). Both belong in the book. Decide which kind fronts the campaign — and which appears only as seasoning.", rows:4,
+     hint:"Lead: the Chapter 3 layoff scene — ‘one of 2,500, gone in a sentence’ — and the rebuild through Bangkok. Ration: celebrity encounters and travel glamour (one flash of charm on the page, no more). The pitch must read as ‘this man can guide me,’ not ‘this man has stories.’"},
+    {k:"m_subtitles", label:"Three subtitle options that carry the positioning.", why:"The title stays; the subtitle does the positioning work on the cover and in every listing.", rows:4,
+     hint:"“Reinventing your leadership and life when the path you planned ends” · “An executive's guide to endings, reinvention, and what to do with your next chapter” · “How leaders turn unchosen endings into their most meaningful work”"}
+  ]
+},
+{ id:"sales", nav:"Outreach readiness", group:"Stage 3 · Sales", eyebrow:"Stage 3 · Sales — Smart Calling (Art Sobczak)", title:"Your campaign outreach, prepared.",
+  intro:["Your campaign succeeds through direct, personal outreach — not passive posting. Sobczak's method: never contact anyone 'cold.' Lead with a <strong>possible value proposition</strong> aimed at what they care about, not at your book."],
+  recall:{title:"From Ground work — your network list", key:"dest_network"},
+  trap:"Three traps stack up here. Broadcasting instead of asking — posts feel productive and convert almost nothing; the campaign is won one personal message at a time. The ‘I wrote a book’ opener — that's about you; Sobczak's openers are about THEM. And heroic capacity estimates — plan for the outreach you'll do in week three when it's tedious, not week one when it's thrilling.",
+  fields:[
+    {k:"s_segments", label:"Sort your network into four groups, with rough counts: Champions · High-tier prospects · Amplifiers · Endorsers.", why:"Champions buy and push others to. High-tier prospects could take a $1K–$12K tier (coaching bundle, team workshop, bulk books). Amplifiers have audiences. Endorsers lend names for the pitch page. Different message, ask, and tier for each.", rows:7},
+    {k:"s_top10", label:"For your top 10 high-tier prospects: what problem do THEY have that a Ronnie workshop or coaching bundle solves? One line each.", why:"'I wrote a book' earns politeness; 'your team just went through a restructure — I've built a session on leading through unchosen endings' earns a meeting.", rows:8},
+    {k:"s_openers", label:"Draft your three openers: (a) former colleague, now senior, for a team/bulk tier · (b) warm contact for a preorder + share · (c) a name, for an endorsement.", why:"We'll refine together — just get honest first versions down.", rows:7,
+     hint:"(a): “You've led people through the kind of restructuring I write about — I'd value your eyes on it. And if it lands, there's a way to put it in front of your team with a working session attached.”"},
+    {k:"s_capacity", label:"Honest capacity during the campaign: hours per week, and personal messages or calls per day you will truly send.", why:"Winning campaigns front-load week one. We plan targets around real capacity, not aspiration.", rows:3},
+    {k:"s_objections", label:"The objections you dread — and your answers.", why:"E.g., 'Why pre-order an unfinished book?' · 'What qualifies you to coach me?' · 'Another self-help book?' Writing the dreaded question defuses it — and becomes pitch-page FAQ copy.", rows:6}
+  ]
+},
+{ id:"sys", nav:"Ladder & pricing", group:"Stage 4 · System", eyebrow:"Stage 4 · System — Key Person of Influence (Daniel Priestley)", title:"The ladder the book opens — priced.",
+  intro:["Priestley's five P's — Pitch, Publish, Product, Profile, Partnerships — treat the book as one pillar of a business, not the business. The goal: leave the campaign with an <strong>ascending, priced ladder</strong>, not just book sales. Your ladder becomes the campaign's reward tiers."],
+  recall:{title:"From Ground work — your coaching offer", key:"dest_offer"},
+  trap:"The costly traps here are pricing from fear and the missing middle rung. Underpricing the top of the ladder tells an executive buyer you're not their tier — a $200 ‘coaching bundle’ reads as amateur to someone who expenses $25K programs. And a ladder that jumps from a $30 book to a $10K engagement strands everyone in between; the $250–$900 middle rungs are where strangers become clients. Price the top with a straight face, and build the middle.",
+  fields:[
+    {k:"f_ladder", label:"Fill in each rung — name and price, free to premium.", why:"Free (a diagnostic or tool) → the book ($20–35 tiers) → mid (group program, workshop, assessment debrief, $250–$900) → high (1:1 coaching, $____) → premium (corporate: team workshop, keynote, advisory, $2,500–$12,500). Every winning campaign we studied bundled these rungs into its reward tiers.", rows:8},
+    {k:"f_pricing", label:"Now defend your two highest prices out loud: why is each number right — and what would make it feel obviously fair to the buyer?", why:"If you can't argue the number, you'll discount it under pressure in a live conversation. Anchor each price to what it replaces (an outplacement contract, a leadership offsite, a bad hire avoided).", rows:5,
+     hint:"“$12,500 for a two-day leadership offsite + 200 books + a quarter of advisory: a firm pays more than that for one outplacement contract for one executive — this serves their whole team and gives every member the book.”"},
+    {k:"f_tool", label:"Which diagnostic from the book becomes your signature named tool?", why:"The book already contains four: the two-questions restlessness diagnostic · the 24-hour service-noticing experiment · 'which early Yes are you still answering?' · 'what is this ending freeing you from / into?' A named assessment (‘The Interval Audit’?) turns readers into leads and gives corporate buyers something concrete.", rows:4},
+    {k:"f_profile", label:"Profile audit: where does your person already gather — and where are you visible today?", why:"LinkedIn following and activity, email list size, speaking history, podcasts, communities. Honest baseline; 'nowhere yet' is workable — it just shifts weight to outreach and partnerships.", rows:5},
+    {k:"f_partners", label:"Partnerships: who already owns rooms full of your person?", why:"Outplacement firms, exec-ed programs, HR/People leaders, pharma and healthcare associations, expat executive networks — and your rare card: Sasin/Wharton/Kellogg alumni networks. One partner newsletter beats months of solo posting.", rows:6},
+    {k:"f_scarce", label:"Oversubscription: what will you cap, honestly?", why:"Priestley: demand forms around visible scarcity. How many coaching slots can you actually serve? How many workshop dates? Winning campaigns capped tiers (10 keynote slots, 4 advisory slots) and sold them out. Scarcity you can't honor destroys trust — cap at your real capacity.", rows:4},
+    {k:"f_arc", label:"The 12-month arc after the campaign: what's the next season?", why:"Publishers and high-tier buyers want to know the book isn't the finale. Campaign → manuscript completion → launch → workshop series, for example.", rows:4}
+  ]
+},
+{ id:"pub", nav:"Proposal materials", group:"Stage 5 · The Proposal", eyebrow:"Stage 5 · The Proposal — Publishizer raw materials", title:"What the Publishizer page is built from.",
+  intro:["Publishers read pitch pages like balance sheets. This is the raw material — every answer here should already be easy, because the stages before did the thinking."],
+  trap:"Two traps at the proposal stage. Burying the coach: your chapters introduce ‘executive coach’ as an aside, and if the page does the same, the whole funnel collapses — authority first, story in service of it. And hiding small numbers: an empty ‘platform’ section looks worse than an honest small one plus borrowed reach. Publishers respect a plan; they distrust a blank.",
+  fields:[
+    {k:"p_bio", label:"Your bio in 100 words — written as AUTHORITY, coaching credential first, story serving it.", why:"Your current chapters do the reverse: the coach appears as an aside inside the storyteller. The pitch page must invert that.", rows:6,
+     hint:"“Ronnie ___ is an executive coach who has lived the reinventions he coaches: perioperative RN at NYU Medical Center, pharmaceutical leadership at Abbott and a global pharma's international division, an MBA from Sasin (taught by Wharton and Kellogg faculty) in Bangkok, and careers across three continents. He has survived the layoff, the losses, and the endings his clients fear — and turned each into the next interval of service. He works with senior leaders navigating unchosen endings and next-act design.”"},
+    {k:"p_outline", label:"Chapter outline for the whole book — one sentence per chapter. Mark which chapters deliver the METHOD, not just the story.", why:"Publishizer proposals need the full outline; publishers weigh whether the book completes its promise. Chapters 1–3 are story-heavy — the outline must show where readers get the tools.", rows:9},
+    {k:"p_numbers", label:"Numbers for the 'sales arguments' section — every real number, however small, plus numbers a partner could lend you.", why:"Email list, LinkedIn reach, client base, corporate contacts, speaking dates, communities you can access. Publishers read this first.", rows:5},
+    {k:"p_goal", label:"Campaign goal, honestly: (a) maximize preorders to attract traditional publishers, or (b) revenue + coaching clients, where fewer, bigger buyers win and hybrid or self-publishing is fine?", why:"They're different campaigns: (a) optimizes volume and low tiers, (b) optimizes high-tier corporate outreach. It's your call, and tier design follows it.", rows:3},
+    {k:"p_video", label:"The 90-second version of your story you can tell to camera without notes — as bullets.", why:"Every strong campaign has a video. We'll script it from these bullets.", rows:6},
+    {k:"p_boundaries", label:"Anything in the book you are NOT willing to lead with publicly? For each: headline / mention / book-only.", why:"Your most differentiating material (recovery, family losses, health) is also your most personal. You set the exposure level before any public copy is written — not after it's live.", rows:5}
+  ]
+},
+{ id:"review", nav:"Review & send", group:"Finish", eyebrow:"Finish", title:"Review your answers and send them to Ari.",
+  intro:["Everything you've written is compiled below. Skim for anything that no longer rings true — you can jump back to any step from the left. When it reads honest, download the document and email it to Ari at Mint Mantis."],
+  review:true, fields:[]
+}
+];
+
+/* ---------------- state ---------------- */
+const LS_KEY = "ronnie-positioning-v1";
+let storageOK = true;
+try{
+  localStorage.setItem(LS_KEY+"-test","1"); localStorage.removeItem(LS_KEY+"-test");
+}catch(e){ storageOK = false; }
+
+let state = {};
+try{ state = JSON.parse(localStorage.getItem(LS_KEY) || "{}"); }catch(e){ state = {}; }
+const answers = state.answers || {};
+let current = Math.min(state.step || 0, STEPS.length-1);
+
+function persist(){
+  state.answers = answers; state.step = current;
+  if(storageOK){
+    try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){ storageOK=false; }
+  }
+  const b = document.getElementById("savebadge");
+  if(storageOK){
+    b.textContent = "Saved " + new Date().toLocaleTimeString([], {hour:"numeric", minute:"2-digit"});
+  }else{
+    b.textContent = "Autosave unavailable"; b.classList.add("warn");
+    document.getElementById("storagewarn").classList.add("show");
+  }
+}
+let saveTimer=null;
+function queueSave(){ clearTimeout(saveTimer); saveTimer=setTimeout(persist, 400); }
+
+/* ---------------- render ---------------- */
+const main = document.getElementById("main");
+const navlist = document.getElementById("navlist");
+
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+function buildNav(){
+  navlist.innerHTML = "";
+  STEPS.forEach((st,i)=>{
+    if(st.group){
+      const g=document.createElement("li"); g.className="navgroup"; g.textContent=st.group; g.setAttribute("role","presentation");
+      navlist.appendChild(g);
+    }
+    const li=document.createElement("li");
+    const b=document.createElement("button");
+    b.innerHTML = `<span class="navnum">${String(i+1).padStart(2,"0")}</span><span>${esc(st.nav)}</span><span class="navdot">●</span>`;
+    b.addEventListener("click", ()=>go(i));
+    b.id = "nav-"+st.id;
+    li.appendChild(b); navlist.appendChild(li);
+  });
+}
+
+function stepDone(st){
+  const req = st.fields.filter(f=>!f.opt);
+  if(!req.length) return false;
+  return req.every(f=> (answers[f.k]||"").trim().length>0);
+}
+
+function refreshNav(){
+  STEPS.forEach((st,i)=>{
+    const b=document.getElementById("nav-"+st.id);
+    b.classList.toggle("active", i===current);
+    b.classList.toggle("done", stepDone(st));
+    if(i===current){ b.setAttribute("aria-current","step"); } else { b.removeAttribute("aria-current"); }
+  });
+  document.getElementById("mobilelabel").textContent = `${current+1} of ${STEPS.length} · ${STEPS[current].nav}`;
+}
+
+function fieldHTML(f){
+  const val = esc(answers[f.k]||"");
+  return `<div class="q">
+    <label for="f_${f.k}">${f.label}${f.opt?`<span class="optional">optional</span>`:""}</label>
+    ${f.why?`<p class="why">${f.why}</p>`:""}
+    <textarea id="f_${f.k}" data-key="${f.k}" rows="${f.rows||4}" placeholder="Your answer…">${val}</textarea>
+    ${f.hint?`<details class="hintbox"><summary>${HINT}</summary><div class="hintbody">${f.hint}</div></details>`:""}
+  </div>`;
+}
+
+function slotSpan(key, fallback){
+  const v = (answers[key]||"").trim();
+  if(!v) return `<span class="slot empty">[${fallback}]</span>`;
+  const short = v.length>220 ? v.slice(0,220)+"…" : v;
+  return `<span class="slot">${esc(short)}</span>`;
+}
+
+function canvasHTML(){
+  return `<div class="canvas-stmt">
+    <div class="canvas-frame">Assembled from your answers — Steps 3–8</div>
+    For ${slotSpan("d6_person","your one person — Step 6")}, who would otherwise turn to ${slotSpan("d3_real","the real default alternative — Step 3")},
+    <em>Intervals of Service</em> is ${slotSpan("d7_style","your market frame — Step 7")}
+    that delivers ${slotSpan("d5_themes","your value themes — Step 5")}.
+    Why now: ${slotSpan("d8_trend","your trend — Step 8")}
+  </div>
+  <p class="intro" style="margin-top:14px">If a bracket above is empty or rings false, jump back to that step — the statement only works when every part is yours.</p>`;
+}
+
+function reviewHTML(){
+  let total=0, filled=0;
+  let blocks="";
+  STEPS.forEach(st=>{
+    if(!st.fields.length) return;
+    let items="";
+    st.fields.forEach(f=>{
+      total++;
+      const v=(answers[f.k]||"").trim();
+      if(v) filled++;
+      items += `<div class="review-item"><p class="rq">${f.label}</p><p class="ra ${v?"":"blank"}">${v?esc(v):"— not answered yet —"}</p></div>`;
+    });
+    blocks += `<div class="review-block"><h3>${esc(st.eyebrow)} — ${esc(st.title)}</h3>${items}</div>`;
+  });
+  const pct = total? Math.round(filled/total*100):0;
+  return `<p class="intro"><strong>${filled} of ${total}</strong> questions answered.</p>
+  <div class="meter"><div style="width:${pct}%"></div></div>
+  ${blocks}
+  <div class=”exportrow”>
+    <button class=”btn” id=”dl”>Download my answers (.md)</button>
+    <button class=”btn ghost” id=”cp”>Copy all answers</button>
+    <button class=”btn ghost” id=”st”>Show answers as text</button>
+    <button class=”btn ghost” id=”ml”>Open email to Ari</button>
+  </div>
+  <div id=”textpanel” style=”display:none; margin-top:18px”>
+    <p class=”exportnote” style=”margin:0 0 8px”><strong>Manual copy (works in every browser):</strong> click inside the box, press ⌘A (or Ctrl+A) then ⌘C (or Ctrl+C), and paste into an email to Ari.</p>
+    <button class=”btn ghost” id=”sel” style=”margin-bottom:10px”>Select all for me</button>
+    <textarea id=”mdtext” readonly style=”width:100%; min-height:320px; border:1px solid var(--line-strong); border-radius:9px; background:var(--paper); color:var(--ink); font:12.5px/1.5 ui-monospace,Menlo,monospace; padding:12px”></textarea>
+  </div>
+  <p class=”exportnote”>Download the file, then attach it to an email to <a href=”mailto:outreach@mintmantis.com”>outreach@mintmantis.com</a>. If the download or copy buttons don't respond in this browser, use <strong>”Show answers as text”</strong> — manual select-and-copy works everywhere. Your answers also stay saved in this browser.</p>`;
+}
+
+function render(){
+  const st = STEPS[current];
+  let html = `<section class="step visible" aria-labelledby="steptitle">
+    <p class="eyebrow">${esc(st.eyebrow)}</p>
+    <h2 id="steptitle">${esc(st.title)}</h2>
+    ${st.intro.map(p=>`<p class="intro">${p}</p>`).join("")}
+    ${st.coach?`<div class="callout"><span class="cn">Coach's note</span>${st.coach}</div>`:""}
+    ${st.trap?`<div class="callout trap"><span class="cn">The trap at this step</span>${st.trap}</div>`:""}
+    ${st.html||""}
+    ${st.recall?`<div class="recall"><div class="rc-title">${esc(st.recall.title)}</div><div class="rc-body ${(answers[st.recall.key]||"").trim()?"":"empty"}">${(answers[st.recall.key]||"").trim()?esc(answers[st.recall.key]):"(You haven't answered that step yet — consider going back first.)"}</div></div>`:""}
+    ${st.canvas?canvasHTML():""}
+    ${st.fields.map(fieldHTML).join("")}
+    ${st.review?reviewHTML():""}
+    <div class="stepnav">
+      ${current>0?`<button class="btn ghost" id="prev">← Back</button>`:""}
+      ${current<STEPS.length-1?`<button class="btn" id="next">${current===0?"Begin →":"Save & continue →"}</button>`:""}
+      <span class="stepcount">${current+1} / ${STEPS.length}</span>
+    </div>
+  </section>`;
+  main.innerHTML = html;
+  main.querySelectorAll("textarea[data-key]").forEach(t=>{
+    t.addEventListener("input", e=>{ answers[e.target.dataset.key]=e.target.value; queueSave(); });
+  });
+  const nx=document.getElementById("next"); if(nx) nx.addEventListener("click", ()=>go(current+1));
+  const pv=document.getElementById("prev"); if(pv) pv.addEventListener("click", ()=>go(current-1));
+  if(st.review){
+    document.getElementById("dl").addEventListener("click", download);
+    document.getElementById("cp").addEventListener("click", copyAll);
+    document.getElementById("ml").addEventListener("click", ()=>{ location.href="mailto:outreach@mintmantis.com?subject="+encodeURIComponent("Intervals of Service — my positioning workbook answers"); });
+    document.getElementById("st").addEventListener("click", ()=>{
+      const p=document.getElementById("textpanel");
+      const show = p.style.display==="none";
+      p.style.display = show?"block":"none";
+      if(show) document.getElementById("mdtext").value = buildMarkdown();
+    });
+    document.getElementById("sel").addEventListener("click", ()=>{
+      const t=document.getElementById("mdtext"); t.focus(); t.select();
+    });
+  }
+  refreshNav();
+  window.scrollTo({top:0});
+}
+
+function go(i){
+  current = Math.max(0, Math.min(i, STEPS.length-1));
+  persist(); render();
+}
+
+/* ---------------- export ---------------- */
+function buildMarkdown(){
+  let md = "# Intervals of Service — Proposal Workbook Answers\n";
+  md += "*Ronnie · exported "+new Date().toLocaleDateString()+" · prepared with Mint Mantis*\n\n";
+  STEPS.forEach(st=>{
+    if(!st.fields.length) return;
+    md += "## "+st.eyebrow+" — "+st.title+"\n\n";
+    st.fields.forEach(f=>{
+      const v=(answers[f.k]||"").trim();
+      md += "**"+f.label+"**\n\n"+(v||"_(not answered)_")+"\n\n";
+    });
+  });
+  return md;
+}
+function download(){
+  const blob = new Blob([buildMarkdown()], {type:"text/markdown"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "Ronnie-Proposal-Workbook-Answers.md";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 5000);
+}
+function copyAll(){
+  const btn=document.getElementById("cp");
+  navigator.clipboard.writeText(buildMarkdown()).then(()=>{ btn.textContent="Copied ✓"; setTimeout(()=>btn.textContent="Copy all answers",2000); },
+    ()=>{ btn.textContent="Copy failed — use Download"; });
+}
+
+/* ---------------- chrome ---------------- */
+document.getElementById("mobiletoggle").addEventListener("click", ()=>{
+  const w=document.getElementById("navwrap");
+  const open=w.classList.toggle("open");
+  document.getElementById("mobiletoggle").setAttribute("aria-expanded", open?"true":"false");
+});
+document.getElementById("backupbtn").addEventListener("click", ()=>{
+  go(STEPS.length-1);
+  setTimeout(()=>{ const b=document.getElementById("st"); if(b && document.getElementById("textpanel").style.display==="none") b.click(); }, 0);
+});
+if(!storageOK){
+  document.getElementById("storagewarn").classList.add("show");
+  const b=document.getElementById("savebadge");
+  b.textContent="Autosave unavailable"; b.classList.add("warn");
+}
+
+buildNav(); render();
+</script>
+
+</body>
+</html>
