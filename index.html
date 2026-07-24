@@ -235,6 +235,7 @@ details.hintbox .hintbody em{color:var(--muted)}
   <main class="main" id="main"></main>
 </div>
 
+<script src="./jspdf.umd.min.js"></script>
 <script>
 "use strict";
 /* ---------------- content model ---------------- */
@@ -548,7 +549,7 @@ function reviewHTML(){
   <div class="meter"><div style="width:${pct}%"></div></div>
   ${blocks}
   <div class=”exportrow”>
-    <button class=”btn” id=”dl”>Download my answers (.md)</button>
+    <button class=”btn” id=”dl”>Download my answers (PDF)</button>
     <button class=”btn ghost” id=”cp”>Copy all answers</button>
     <button class=”btn ghost” id=”st”>Show answers as text</button>
     <button class=”btn ghost” id=”ml”>Open email to Ari</button>
@@ -558,7 +559,7 @@ function reviewHTML(){
     <button class=”btn ghost” id=”sel” style=”margin-bottom:10px”>Select all for me</button>
     <textarea id=”mdtext” readonly style=”width:100%; min-height:320px; border:1px solid var(--line-strong); border-radius:9px; background:var(--paper); color:var(--ink); font:12.5px/1.5 ui-monospace,Menlo,monospace; padding:12px”></textarea>
   </div>
-  <p class=”exportnote”>Download the file, then attach it to an email to <a href=”mailto:outreach@mintmantis.com”>outreach@mintmantis.com</a>. If the download or copy buttons don't respond in this browser, use <strong>”Show answers as text”</strong> — manual select-and-copy works everywhere. Your answers also stay saved in this browser.</p>`;
+  <p class=”exportnote”>The PDF saves to your <strong>Downloads folder</strong> — attach it to an email to <a href=”mailto:outreach@mintmantis.com”>outreach@mintmantis.com</a>. If the buttons don't respond in this browser, use <strong>”Show answers as text”</strong> — manual select-and-copy works everywhere. Your answers also stay saved in this browser.</p>`;
 }
 
 function render(){
@@ -623,13 +624,61 @@ function buildMarkdown(){
   });
   return md;
 }
+function pdfSafe(s){
+  return String(s)
+    .replace(/→/g,"->").replace(/←/g,"<-")
+    .replace(/[★●◆✦]/g,"*")
+    .replace(/·/g,"-").replace(/✓/g,"[x]")
+    .replace(/[^\x20-\xFF\n‘’“”–—…]/g,"");
+}
+function buildPDF(){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({unit:"pt", format:"a4"});
+  const L=56, W=483, BOTTOM=780;
+  let y=64;
+  const room = need => { if(y+need>BOTTOM){ doc.addPage(); y=64; } };
+  const put = (text, size, style, color, gapAfter)=>{
+    doc.setFont("helvetica", style); doc.setFontSize(size); doc.setTextColor(color);
+    const lines = doc.splitTextToSize(pdfSafe(text), W);
+    const lh = size*1.35;
+    lines.forEach(ln=>{ room(lh); doc.text(ln, L, y); y+=lh; });
+    y+=gapAfter;
+  };
+  put("Intervals of Service — Proposal Workbook Answers", 16, "bold", "#1a1a1a", 4);
+  put("Ronnie Kinsey — exported "+new Date().toLocaleDateString()+" — prepared with Mint Mantis", 9.5, "normal", "#666666", 14);
+  STEPS.forEach(st=>{
+    if(!st.fields.length) return;
+    room(60);
+    put(st.eyebrow.toUpperCase(), 8.5, "bold", "#206B4E", 2);
+    put(st.title, 12.5, "bold", "#1a1a1a", 8);
+    st.fields.forEach(f=>{
+      const v=(answers[f.k]||"").trim();
+      room(40);
+      put(f.label, 10, "bold", "#333333", 2);
+      if(v){ put(v, 10, "normal", "#1a1a1a", 10); }
+      else { put("(not answered)", 10, "italic", "#999999", 10); }
+    });
+    y+=6;
+  });
+  return doc;
+}
 function download(){
-  const blob = new Blob([buildMarkdown()], {type:"text/markdown"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "Ronnie-Proposal-Workbook-Answers.md";
-  document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(()=>URL.revokeObjectURL(a.href), 5000);
+  const btn=document.getElementById("dl") || document.getElementById("backupbtn");
+  try{
+    if(window.jspdf && window.jspdf.jsPDF){
+      buildPDF().save("Ronnie-Proposal-Workbook-Answers.pdf");
+    }else{
+      const blob = new Blob([buildMarkdown()], {type:"text/markdown"});
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "Ronnie-Proposal-Workbook-Answers.md";
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(a.href), 5000);
+    }
+    if(btn && btn.id==="dl"){ btn.textContent="Saved to your Downloads folder ✓"; setTimeout(()=>{btn.textContent="Download my answers (PDF)";}, 4000); }
+  }catch(e){
+    if(btn && btn.id==="dl"){ btn.textContent="Download blocked — use 'Show answers as text'"; }
+  }
 }
 function copyAll(){
   const btn=document.getElementById("cp");
