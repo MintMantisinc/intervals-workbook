@@ -240,27 +240,51 @@ table.ct td{padding:7px 9px; border:1px solid var(--line); vertical-align:top}
 /* ---------------- content model ---------------- */
 const HINT = "Stuck? Open a draft to react to";
 const STEPS = [
-{ id:"welcome", nav:"Welcome", group:null, eyebrow:"Before you begin", title:"Price the ladder, not the book.",
+{ id:"welcome", nav:"Welcome", group:null, eyebrow:"Before you begin", title:"Pricing & Bundles Discovery",
   intro:[
-    "Ronnie — this workbook helps you decide your <strong>freebie, book pricing, B2C products, B2B products, and premium coaching offers</strong> — the full ladder your fundraising campaign will open. Every step shows what our research found (from coaches like Chip Conley, Dorie Clark, Marshall Goldsmith, and Michael Bungay Stanier, and from the best-performing Publishizer campaigns), then asks what fits YOU.",
-    "The research is guidance, not prescription. Where a suggested number feels wrong, write your own — but write the reason next to it. Expect 60–90 minutes."
+    "Ronnie — this workbook helps you decide what you'll offer and what you'll charge, one rung at a time: your free gift, your book tiers, your workshops and cohort, your premium coaching, and your corporate offers. At each step you'll see what has worked for successful coaches, then choose what fits you. Expect 60–90 minutes.",
+    "Here is the whole system you're about to design, in simple form:"
   ],
-  html:`<ul class="howlist">
-    <li><span class="hownum">1</span><div><strong>Research first, then your call.</strong> Each step opens with what worked for comparable coaches, with real numbers. Sample answers sit behind the amber panels — try your own first.</div></li>
-    <li><span class="hownum">2</span><div><strong>Watch the traps.</strong> Pricing has predictable failure modes for coaches — each step names the one most likely to bite here.</div></li>
-    <li><span class="hownum">3</span><div><strong>Everything autosaves</strong> on this device as you type (same browser throughout; the button on the left backs up anytime). The final screen turns your answers into a PDF you email to Ari.</div></li>
+  html:`<ul class="stagemap">
+    <li><span class="stagenum">1</span><div><div class="stagename">Free gift</div><div class="stagedesc">The What's Next Scorecard — helps people recognize their situation, and gives you market data.</div></div></li>
+    <li><span class="stagenum">2</span><div><div class="stagename">Publish</div><div class="stagedesc">LinkedIn posts, newsletter, videos, and <em>Intervals of Service</em> — builds recognition around one problem and one method.</div></div></li>
+    <li><span class="stagenum">3</span><div><div class="stagename">Entry purchase</div><div class="stagedesc">$20–$99 book and Scorecard tiers — turns followers into identifiable buyers.</div></div></li>
+    <li><span class="stagenum">4</span><div><div class="stagename">Experience</div><div class="stagedesc">The $250 workshop — lets people experience your thinking, and validates the method.</div></div></li>
+    <li><span class="stagenum">5</span><div><div class="stagename">Transformation</div><div class="stagedesc">$900 founding cohort, later $1,500–$2,500 — produces documented outcomes and a community of advocates.</div></div></li>
+    <li><span class="stagenum">6</span><div><div class="stagename">Premium implementation</div><div class="stagedesc">$5,000–$12,500 private advisory — supports complex individual transitions.</div></div></li>
+    <li><span class="stagenum">7</span><div><div class="stagename">Organizational deployment</div><div class="stagedesc">Bulk books, $2,500–$10,000 workshops, and $12,500+ programs — turns the personal framework into a corporate solution.</div></div></li>
+    <li><span class="stagenum">8</span><div><div class="stagename">Partnerships and scale</div><div class="stagedesc">Associations, outplacement firms, healthcare systems, executive education, licensing — moves the business beyond your own calendar and following.</div></div></li>
+  </ul>
+  <ul class="howlist">
+    <li><span class="hownum">a</span><div><strong>Guidance, not prescription.</strong> Where a suggested number feels wrong, write your own — with the reason next to it. Sample answers sit behind the amber panels; try your own first.</div></li>
+    <li><span class="hownum">b</span><div><strong>Everything autosaves</strong> on this device as you type (same browser throughout; the button on the left backs up anytime). The final screen turns your answers into a PDF you email to Ari.</div></li>
   </ul>`,
   fields:[]
 },
-{ id:"pos", nav:"Positioning summary", group:"Foundation", eyebrow:"Foundation · Where prices come from", title:"Your positioning — our best draft, for your reaction.",
+{ id:"pos", nav:"Sample positioning", group:"Foundation", eyebrow:"Foundation · Where prices come from", title:"Sample positioning.",
   intro:[
-    "Prices inherit from positioning: an executive buyer pays executive prices only for an executive-positioned coach. Here is the positioning we drafted from your manuscript and public presence. <strong>Treat it as sample guidance to develop your own</strong> — your positioning workbook produces the final version; this summary just gives your pricing something to stand on.",
-    "<em>“For accomplished professionals facing an ending they didn't choose — or a success they've outgrown — who would otherwise sprint into the next identical role, <strong>Intervals of Service</strong> is a career-reinvention guide by Ronnie Kinsey, MBA, PCC: a coach who has lived the turn repeatedly — nurse, pharma executive, laid off with 2,500 others, rebuilt in Bangkok, reinvented again at sixty into one of LinkedIn's fastest-growing voices. Unlike one-calling purpose books and résumé-first outplacement, it treats life as intervals of service — and gives the reader the diagnostics to design the next one on purpose.”</em>"
+    "Prices inherit from positioning — so here is a sample, kept as simple as a Smart Calling opener. It stands in as an example until you finish your positioning workbook, which produces the real one:",
+    "<em>“I help accomplished professionals figure out what's next when a career ends or stops fitting. I've lived that turn myself — nurse, pharma executive, laid off, rebuilt — and now I coach leaders through it. The book gives you the method.”</em>"
   ],
-  trap:"The trap is skipping this step because “pricing is the point.” A workshop is worth $500 from ‘a LinkedIn creator’ and $8,500 from ‘the coach for leaders in transition — PCC, ex-Abbott, NYU, Hopkins, Stanford.’ If you disagree with the positioning, your prices will drift back to whatever feels safe. React to it now, in writing.",
+  trap:"The trap is skipping this step because “pricing is the point.” The same workshop is worth $500 from ‘a LinkedIn creator’ and $8,500 from ‘the coach for leaders in transition.’ If the positioning is off, every price below it drifts back to whatever feels safe.",
   fields:[
-    {k:"pos_react", label:"What rings true in this draft — and what rings false?", why:"Short and honest. Where it rings false, your pricing answers later will tell us why.", rows:5},
-    {k:"pos_own", label:"Now say the positioning in YOUR words — one breath.", why:"Not polished. Just how you would say it across a dinner table to the exact person the book is for.", rows:4}
+    {k:"pos_react", label:"What rings true in this sample — and what rings false?", why:"Short and honest. Where it rings false, your pricing answers later will tell us why.", rows:4},
+    {k:"pos_own", label:"Now say it in YOUR words — one breath.", why:"Simple enough to say on a phone call to the exact person the book is for.", rows:3}
+  ]
+},
+{ id:"fw", nav:"Your framework", group:null, eyebrow:"Foundation · Your repeatable method", title:"Your framework: results that repeat.",
+  intro:[
+    "Every rung of the ladder is the same framework in a different container — the book explains it, the workshop teaches it, the cohort applies it, coaching implements it, and the corporate program deploys it. A named, stepped framework is what makes your results repeatable — and repeatability is what buyers are actually paying for."
+  ],
+  trap:"The trap is selling wisdom instead of a method. Wisdom requires you in the room, improvising; a framework produces results in a known sequence, can be taught, priced, licensed — and lets a buyer see exactly what they are purchasing before they meet you.",
+  fields:[
+    {k:"fw_steps", label:"Write your method as numbered steps (3–6). What do you actually walk someone through, in order?", why:"The steps you already use with clients — not an aspiration. If you do it differently each time, write the version that worked best.", rows:7,
+     hint:"A draft assembled from your book's diagnostics, to react to: 1. Name what is ending · 2. Separate identity from title · 3. Inventory your carry-forward value · 4. Choose and test the next contribution · 5. Position and activate (new narrative + 90-day plan)."},
+    {k:"fw_result", label:"What result does it reliably produce? Complete: “By the end, you will ___.”", why:"One sentence a buyer can repeat to their spouse or their CFO.", rows:3,
+     hint:"“…know what has ended, what you carry forward, and what your next interval is — with a 90-day plan to act on it.”"},
+    {k:"fw_proof", label:"Where has this already worked?", why:"Your own turns count; clients count more. List the cases that prove the steps repeat.", rows:4},
+    {k:"fw_name", label:"Name the framework.", why:"The name appears in the book, the workshop title, the corporate proposal — one name everywhere.", rows:2,
+     hint:"Candidates: The Intervals Method · The Next Interval Method — with The Interval Audit as its diagnostic front door."}
   ]
 },
 { id:"free", nav:"The freebie", group:"The ladder", eyebrow:"The ladder · Rung 0 (free)", title:"The freebie: what do you give away?",
